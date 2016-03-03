@@ -1,0 +1,274 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="http://www.nongnu.org/elyxer/">
+<meta name="create-date" content="2014-03-25">
+<link rel="stylesheet" href="aide_fichiers/lyx.css" type="text/css" media="all">
+<title>Module GéoEpidemiologie</title>
+</head>
+<body>
+<div id="globalWrapper">
+<h1 class="title">
+Module GéoEpidemiologie
+</h1>
+<div class="Unindented">
+Ce module permet de créer les données de bases pour des études de 
+géo-épidemiologies tel que le nombre de personnes années, les taux 
+d’incidences spécifiques (par classes d’âges), le nombre de cas attendus
+ pour le calcul des taux d’incidences standardisés indirects, avec 
+également des fichiers adaptés pour le logiciel Satscan.
+</div>
+<div class="Indented">
+Le module contient uniquement les données pour la France métropolitaine.
+</div>
+<h1 class="Part-">
+<a class="toc" name="toc-Part--I"></a>Données
+</h1>
+<h1 class="Section-">
+<a class="toc" name="toc-Section--1"></a>Géométrie.
+</h1>
+<div class="Unindented">
+La géométrie est constituer d’un fichier shape(.shp) représentant la 
+France métropolitaine au niveau communal. Les limites communales 
+correspondent à l’année 2008. Le fichier source provient de l’INSEE (<a class="URL" href="http://professionnels.ign.fr/geofla#tab-3">http://professionnels.ign.fr/geofla#tab-3</a>).
+</div>
+<div class="Indented">
+L’affichage des données géographique se fait via l’onglet “Afficher la carte”.
+</div>
+<div class="Indented">
+On peut bien évidement ne travailler que sur un département, région ou 
+autre via l’onglet “Filtrer” (clique droit sur la couche “commune”).
+</div>
+<div class="Indented">
+L’utilisateur peu également travailler avec ses propres fichiers SIG à 
+condition que le code INSEE des communes soit enregistré dans la 
+première colonne de la table attributaire.
+</div>
+<h1 class="Section-">
+<a class="toc" name="toc-Section--2"></a>Les données du recensement.
+</h1>
+<div class="Unindented">
+Les données des recensement sont disponible pour la période de 1999 à 2012.
+</div>
+<div class="Indented">
+La base de données est constitué d’une base SQLite, contenant une table 
+pour chaque sexe et pour chaque année. Le recensement de la population 
+Française est donné par communes et par classes d’âges quinquennales.
+</div>
+<div class="Indented">
+Les années 1999 et 2006 sont issue du recensement de la population 
+fourni par l’INSEE. les années intermédiaire ont été obtenue par 
+interpolation linéaire.
+</div>
+<div class="Indented">
+Les années 2007 à 2009 sont issue de l’INSEE.
+</div>
+<div class="Indented">
+Les années 2010 et 2012 sont une duplication de l’année 2009.
+</div>
+<div class="Indented">
+Le nombre commune peut être différent d’un recensement à l’autre 
+(suppression, création, fusion de commune ...), normalement le module 
+détecte et informe l’utilisateur si il n’y a pas une correspondance 
+parfaite entre les différentes années de recensement demandé, dans un 
+tel cas il est nécessaire d’exclure la ou les communes concernées.
+</div>
+<h1 class="Section-">
+<a class="toc" name="toc-Section--3"></a>éléments nécessaires au calcul
+</h1>
+<h1 class="Part-">
+<a class="toc" name="toc-Part--II"></a>Exemple de mise en œuvre.
+</h1>
+<h1 class="Section-">
+<a class="toc" name="toc-Section--4"></a>Calcul des taux d’incidences spécifiques.
+</h1>
+<div class="Unindented">
+On suppose que l’utilisateur possède un fichier “cas” de type shape ou 
+autres contenant l’ensemble des cas d’une maladie donnée avec au minimum
+ un champ contenant l’age au moment du diagnostique (de type “int” ou 
+“double”).
+</div>
+<div class="Indented">
+On utilise l’onglet “Nombre de cas par classes d’age” fig:<a class="Reference" href="#fig:1">1↓</a>
+ qui permet de choisir une couche et un champ (age au diagnostique). Si 
+on coche “utiliser la sélection” le traitement ne se fera que sur les 
+entités sélectionnées. 
+</div>
+<div class="Indented">
+Enregistrer le fichier au format “csv” (écrire explicitement l’extension)
+</div>
+<div class="Indented">
+<div class="float">
+<a class="Label" name="fig:1"> </a><div class="figure">
+<div class="center">
+<img class="embedded" src="aide_fichiers/nbCasAge.png" alt="Figure nbCasAge.png" style="width: 239px; max-width: 479px; height: 142px; max-height: 285px;">
+<div class="caption">
+Figure 1 Nombre de cas par classes d’ages
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="Indented">
+Pour le calcul du nombre de personne année par classes d’age on ouvre l’onglet “Nombre de personnes-années” fig:<a class="Reference" href="#fig:2">2↓</a>, on sélectionne le genre, les années appropriées et le type de sortie “Classes d’age” puis on enregistre au format “csv”.
+</div>
+<div class="Indented">
+Penser a rendre active la couche “commune” dans Qgis en cliquant dessus dans l’onglet “Couches” au préalable.
+</div>
+<div class="Indented">
+<div class="float">
+<a class="Label" name="fig:2"> </a><div class="figure">
+<div class="center">
+<img class="embedded" src="aide_fichiers/classesAge.png" alt="Figure classesAge.png" style="width: 334px; max-width: 668px; height: 114px; max-height: 229px;">
+<div class="caption">
+Figure 2 Nombre de personnes années par classes d’age
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="Indented">
+On a maintenant les éléments nécessaire au calcul des taux d’incidences spécifiques. Ouvrer l’onglet “Taux d’incidence” fig:<a class="Reference" href="#fig:3">3↓</a> et charger les deux fichiers précédemment créer et enregistrer toujours au format “csv”.
+</div>
+<div class="Indented">
+<div class="float">
+<a class="Label" name="fig:3"> </a><div class="figure">
+<div class="center">
+<img class="embedded" src="aide_fichiers/tauxIncidence.png" alt="Figure tauxIncidence.png" style="width: 261px; max-width: 522px; height: 142px; max-height: 284px;">
+
+</div>
+<div class="caption">
+Figure 3 Taux d’incidence
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="Indented">
+Le module renvoi une petite fenêtre d’information comprenant le taux d’incidence brut avec intervalle de confiance à 95%.
+</div>
+<div class="Indented">
+<div class="float">
+<a class="Label" name="fig:4"> </a><div class="figure">
+<div class="center">
+<img class="embedded" src="aide_fichiers/TI.png" alt="Figure TI.png" style="width: 251px; max-width: 502px; height: 66px; max-height: 132px;">
+<div class="caption">
+Figure 4 Taux brut
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="Indented">
+Si on a cocher “Afficher le graphique” celui-ci s’affiche.
+</div>
+<div class="Indented">
+<div class="float">
+<a class="Label" name="fig:5"> </a><div class="figure">
+<div class="center">
+<img class="embedded" src="aide_fichiers/graphTI.png" alt="Figure graphTI.png" style="width: 321px; max-width: 642px; height: 285px; max-height: 571px;">
+<div class="caption">
+Figure 5 Graphique des taux d’incidence
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<h1 class="Section-">
+<a class="toc" name="toc-Section--5"></a>Calcul du nombre de cas attendus.
+</h1>
+<div class="Unindented">
+On re-calcul le nombre de personnes années avec les mêmes paramètres que
+ précédemment (genre et années) mais on fixe le “Type de sortie” à 
+“Matrice”, on enregistre au format “csv”.
+</div>
+<div class="Indented">
+On ouvre ensuite l’onglet “Nombre de cas attendu” fig:<a class="Reference" href="#fig:6">6↓</a> , on charge le fichier précédemment créer et les taux d’incidences spécifiques.
+</div>
+<div class="Indented">
+<div class="float">
+<a class="Label" name="fig:6"> </a><div class="figure">
+<div class="center">
+<img class="embedded" src="aide_fichiers/casAttendu.png" alt="Figure casAttendu.png" style="width: 211px; max-width: 423px; height: 128px; max-height: 256px;">
+<div class="caption">
+Figure 6 Nombre de cas attendu
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="Indented">
+Si on a cocher “Importer les données dans Qgis” le résultat fig:<a class="Reference" href="#fig:7">7↓</a>
+ sera automatiquement charger dans Qgis , la couche est constitué d’une 
+table sans géométrie avec deux champs dont le premier “INSEE” qui 
+correspond aux code INSEE de chaque communes et peu permettre 
+d’effectuer une jointure avec d’autres tables et le deuxième “cas 
+attendu” qui correspond au nombre de cas attendu pour chaque commune.
+</div>
+<div class="Indented">
+<div class="float">
+<a class="Label" name="fig:7"> </a><div class="figure">
+<div class="center">
+<img class="embedded" src="aide_fichiers/resultat.png" alt="Figure resultat.png" style="width: 245px; max-width: 490px; height: 184px; max-height: 369px;">
+<div class="caption">
+Figure 7 résultat
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<h1 class="Section-">
+<a class="toc" name="toc-Section--6"></a>Création de fichier pour le logiciel SaTScan<span class="bibcites">[<a class="bibliocite" name="cite-1" href="#biblio-1">1</a>]</span>.
+</h1>
+<div class="Unindented">
+Le module “Nombre de personne année” permet de choisir un type de sortie
+ particulier “Satscan” dedié au logiciel du même nom. C’est un fichier 
+texte (rajouter l’extension “.pop” au nom du fichier) celui-ci est 
+composé de 5 colonnes séparées par des tabulations organisé comme suit: 
+code INSEE, année, population, classe d’age, sexe. 
+</div>
+<a class="toc" name="Références"></a><h1 class="biblio">
+Références
+</h1>
+<p class="biblio">
+<span class="entry">[<a class="biblioentry" name="biblio-1">1</a>] </span>Kulldorff
+ M. and Information Management Services, Inc. SaTScanTM v8.0: Software 
+for the spatial and space-time scan statistics. http://www.satscan.org/,
+ 2009.
+</p>
+
+<hr class="footer">
+<div class="footer" id="generated-by">
+Document generated by <a href="http://elyxer.nongnu.org/">eLyXer 1.2.5 (2013-03-10)</a> le <span class="create-date">2014-03-25T18:07:00.971103</span>
+</div>
+</div>
+
+
+</body></html>

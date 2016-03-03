@@ -1,0 +1,947 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\newcommand{\xyR}[1]{%
+\xydef@\xymatrixrowsep@{#1}}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language french
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 1
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\rightmargin 3cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Module GéoEpidemiologie
+\end_layout
+
+\begin_layout Standard
+Ce module permet de créer les données de bases pour des études de géo-épidemiolo
+gies tel que le nombre de personnes années, les taux d'incidences spécifiques
+ (par classes d’âges), le nombre de cas attendus pour le calcul des taux
+ d'incidences standardisés indirects, avec également des fichiers adaptés
+ pour le logiciel Satscan.
+\end_layout
+
+\begin_layout Standard
+Le module contient uniquement les données pour la France métropolitaine.
+\end_layout
+
+\begin_layout Part*
+Données
+\end_layout
+
+\begin_layout Section*
+Géométrie.
+\end_layout
+
+\begin_layout Standard
+La géométrie est constituer d'un fichier shape(.shp) représentant la France
+ métropolitaine au niveau communal.
+ Les limites communales correspondent à l'année 2008.
+ Le fichier source provient de l'INSEE
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-1"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+L'affichage des données géographique se fait via l'onglet 
+\begin_inset Quotes eld
+\end_inset
+
+Afficher la carte
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+On peut bien évidement ne travailler que sur un département, région ou autre
+ via l'onglet 
+\begin_inset Quotes eld
+\end_inset
+
+Filtrer
+\begin_inset Quotes erd
+\end_inset
+
+ (clique droit sur la couche 
+\begin_inset Quotes eld
+\end_inset
+
+commune
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+L'utilisateur peu également travailler avec ses propres fichiers SIG à condition
+ que le code INSEE des communes soit enregistré dans la première colonne
+ de la table attributaire.
+\end_layout
+
+\begin_layout Section*
+Les données du recensement.
+\end_layout
+
+\begin_layout Standard
+Les données des recensement sont disponible pour la période de 1999 à 2012.
+\end_layout
+
+\begin_layout Standard
+La base de données est constitué d'une base SQLite, contenant une table
+ pour chaque sexe et pour chaque année.
+ Le recensement de la population Française est donné par communes et par
+ classes d'âges quinquennales.
+\end_layout
+
+\begin_layout Standard
+Les années 1999 et 2006 sont issue du recensement de la population fourni
+ par l'INSEE
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-2"
+
+\end_inset
+
+.
+ les années intermédiaire ont été obtenue par interpolation linéaire.
+\end_layout
+
+\begin_layout Standard
+Les années 2007 à 2009 sont issue de l'INSEE.
+\end_layout
+
+\begin_layout Standard
+Les années 2010 et 2012 sont une duplication de l'année 2009.
+\end_layout
+
+\begin_layout Standard
+Le nombre commune peut être différent d'un recensement à l'autre (suppression,
+ création, fusion de commune ...), normalement le module détecte et informe
+ l'utilisateur si il n’y a pas une correspondance parfaite entre les différentes
+ années de recensement demandé, dans un tel cas il est nécessaire d'exclure
+ la ou les communes concernées.
+\end_layout
+
+\begin_layout Part*
+Exemple de mise en œuvre.
+\end_layout
+
+\begin_layout Section*
+Calcul des taux d'incidences spécifiques.
+\end_layout
+
+\begin_layout Standard
+On suppose que l'utilisateur possède un fichier 
+\begin_inset Quotes eld
+\end_inset
+
+cas
+\begin_inset Quotes erd
+\end_inset
+
+ de type shape ou autres contenant l'ensemble des cas d'une maladie donnée
+ avec au minimum un champ contenant l'age au moment du diagnostique (de
+ type 
+\begin_inset Quotes eld
+\end_inset
+
+int
+\begin_inset Quotes erd
+\end_inset
+
+ ou 
+\begin_inset Quotes eld
+\end_inset
+
+double
+\begin_inset Quotes erd
+\end_inset
+
+).
+ Un fichier est donné à titre d'exemple dans (
+\begin_inset Quotes eld
+\end_inset
+
+~/.qgis2/python/plugins/GeoEpidemio/data/cas.shp
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+On utilise l'onglet 
+\begin_inset Quotes eld
+\end_inset
+
+Nombre de cas par classes d'age
+\begin_inset Quotes erd
+\end_inset
+
+ fig:
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:1"
+
+\end_inset
+
+ qui permet de choisir une couche et un champ (age au diagnostique).
+ Si on coche 
+\begin_inset Quotes eld
+\end_inset
+
+utiliser la sélection
+\begin_inset Quotes erd
+\end_inset
+
+ le traitement ne se fera que sur les entités sélectionnées.
+ 
+\end_layout
+
+\begin_layout Standard
+Enregistrer le fichier au format 
+\begin_inset Quotes eld
+\end_inset
+
+.csv
+\begin_inset Quotes erd
+\end_inset
+
+ (écrire explicitement l'extension)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename nbCasAge.png
+	lyxscale 75
+	scale 60
+	groupId graph
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:1"
+
+\end_inset
+
+Nombre de cas par classes d'ages
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Pour le calcul du nombre de personne année par classes d'age on ouvre l'onglet
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Nombre de personnes-années
+\begin_inset Quotes erd
+\end_inset
+
+ fig:
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:2"
+
+\end_inset
+
+, on sélectionne le genre, les années appropriées et le type de sortie 
+\begin_inset Quotes eld
+\end_inset
+
+Classes d'age
+\begin_inset Quotes erd
+\end_inset
+
+ puis on enregistre au format 
+\begin_inset Quotes eld
+\end_inset
+
+.csv
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Penser a rendre active la couche 
+\begin_inset Quotes eld
+\end_inset
+
+commune
+\begin_inset Quotes erd
+\end_inset
+
+ dans Qgis en cliquant dessus dans l'onglet 
+\begin_inset Quotes eld
+\end_inset
+
+Couches
+\begin_inset Quotes erd
+\end_inset
+
+ au préalable.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename classesAge.png
+	lyxscale 75
+	scale 60
+	groupId graph
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:2"
+
+\end_inset
+
+Nombre de personnes années par classes d'age
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On a maintenant les éléments nécessaire au calcul des taux d'incidences
+ spécifiques.
+ Ouvrer l'onglet 
+\begin_inset Quotes eld
+\end_inset
+
+Taux d'incidence
+\begin_inset Quotes erd
+\end_inset
+
+ fig:
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:3"
+
+\end_inset
+
+ et charger les deux fichiers précédemment créer et enregistrer toujours
+ au format 
+\begin_inset Quotes eld
+\end_inset
+
+.csv
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename tauxIncidence.png
+	lyxscale 75
+	scale 60
+	groupId graph
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:3"
+
+\end_inset
+
+Taux d'incidence
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Le module renvoi une petite fenêtre d'information comprenant le taux d'incidence
+ brut avec intervalle de confiance à 95%.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename TI.png
+	lyxscale 75
+	scale 60
+	groupId graph
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:4"
+
+\end_inset
+
+Taux brut
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Si on a cocher 
+\begin_inset Quotes eld
+\end_inset
+
+Afficher le graphique
+\begin_inset Quotes erd
+\end_inset
+
+ celui-ci s'affiche.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename graphTI.png
+	lyxscale 75
+	scale 60
+	groupId graph
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:5"
+
+\end_inset
+
+Graphique des taux d'incidence
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Calcul du nombre de cas attendus.
+\end_layout
+
+\begin_layout Standard
+On re-calcul le nombre de personnes années avec les mêmes paramètres que
+ précédemment (genre et années) mais on fixe le 
+\begin_inset Quotes eld
+\end_inset
+
+Type de sortie
+\begin_inset Quotes erd
+\end_inset
+
+ à 
+\begin_inset Quotes eld
+\end_inset
+
+Matrice
+\begin_inset Quotes erd
+\end_inset
+
+, on enregistre au format 
+\begin_inset Quotes eld
+\end_inset
+
+csv
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+On ouvre ensuite l'onglet 
+\begin_inset Quotes eld
+\end_inset
+
+Nombre de cas attendu
+\begin_inset Quotes erd
+\end_inset
+
+ fig:
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:6"
+
+\end_inset
+
+ , on charge le fichier précédemment créer et les taux d'incidences spécifiques.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename casAttendu.png
+	lyxscale 75
+	scale 60
+	groupId graph
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:6"
+
+\end_inset
+
+Nombre de cas attendu
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Si on a cocher 
+\begin_inset Quotes eld
+\end_inset
+
+Importer les données dans Qgis
+\begin_inset Quotes erd
+\end_inset
+
+ le résultat fig:
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:7"
+
+\end_inset
+
+ sera automatiquement charger dans Qgis , la couche est constitué d'une
+ table sans géométrie avec deux champs dont le premier 
+\begin_inset Quotes eld
+\end_inset
+
+INSEE
+\begin_inset Quotes erd
+\end_inset
+
+ qui correspond aux code INSEE de chaque communes et peu permettre d'effectuer
+ une jointure avec d'autres tables et le deuxième 
+\begin_inset Quotes eld
+\end_inset
+
+cas attendu
+\begin_inset Quotes erd
+\end_inset
+
+ qui correspond au nombre de cas attendu pour chaque commune.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename resultat.png
+	lyxscale 75
+	scale 60
+	groupId graph
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:7"
+
+\end_inset
+
+résultat
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Calcul du nombre de cas observés.
+\end_layout
+
+\begin_layout Standard
+Le calcul du nombre de cas observés par commune ne pose pas de problème
+ particulier, on peut utilisé pour ce faire l’outil 
+\begin_inset Quotes eld
+\end_inset
+
+Nombre de points dans un polygone
+\begin_inset Quotes erd
+\end_inset
+
+ se trouvant dans 
+\begin_inset Quotes eld
+\end_inset
+
+Outils d'analyses
+\begin_inset Quotes erd
+\end_inset
+
+ de l'onglet 
+\begin_inset Quotes eld
+\end_inset
+
+Vecteur
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Pour finaliser il ne reste plus qu'a réaliser une jointure entre les deux
+ table 
+\begin_inset Quotes eld
+\end_inset
+
+cas observés
+\begin_inset Quotes erd
+\end_inset
+
+ et 
+\begin_inset Quotes eld
+\end_inset
+
+cas attendus
+\begin_inset Quotes erd
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Section*
+Création de fichier pour le logiciel SaTScan
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-3"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Le module 
+\begin_inset Quotes eld
+\end_inset
+
+Nombre de personne année
+\begin_inset Quotes erd
+\end_inset
+
+ permet de choisir un type de sortie particulier 
+\begin_inset Quotes eld
+\end_inset
+
+Satscan
+\begin_inset Quotes erd
+\end_inset
+
+ dedié au logiciel du même nom.
+ C'est un fichier texte (rajouter l'extension 
+\begin_inset Quotes eld
+\end_inset
+
+.pop
+\begin_inset Quotes erd
+\end_inset
+
+ au nom du fichier) celui-ci est composé de 5 colonnes séparées par des
+ tabulations organisé comme suit: code INSEE, année, population, classe
+ d'age, sexe.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "1"
+key "key-1"
+
+\end_inset
+
+
+\begin_inset CommandInset href
+LatexCommand href
+target "http://professionnels.ign.fr/geofla#tab-3"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "2"
+key "key-2"
+
+\end_inset
+
+
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.insee.fr/fr/themes/detail.asp?reg_id=99&ref_id=pop-sexe-age-quinquennal"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "3"
+key "key-3"
+
+\end_inset
+
+Kulldorff M.
+ and Information Management Services, Inc.
+ SaTScanTM v8.0: Software for the spatial and space-time scan statistics.
+ http://www.satscan.org/, 2009.
+\end_layout
+
+\end_body
+\end_document
