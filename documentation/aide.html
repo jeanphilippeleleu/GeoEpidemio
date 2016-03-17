@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="generator" content="http://www.nongnu.org/elyxer/">
-<meta name="create-date" content="2016-03-02">
+<meta name="create-date" content="2016-03-17">
 <link rel="stylesheet" href="aide_fichiers/lyx.css" type="text/css" media="all">
 <title>Module GéoEpidemiologie</title>
 </head>
@@ -261,6 +261,19 @@ Le module “Nombre de personne année” permet de choisir un type de sortie
 texte (rajouter l’extension “.pop” au nom du fichier) celui-ci est 
 composé de 5 colonnes séparées par des tabulations organisé comme suit: 
 code INSEE, année, population, classe d’age, sexe. 
+</div>
+<h1 class="Part-">
+<a class="toc" name="toc-Part--III"></a>Utilisation directe des données sans utilisation du plugin.
+</h1>
+<div class="Unindented">
+Il est possible d’utiliser les données du recensement sans utiliser le 
+plugin puisque les données sont séparées de l’application, celles-ci 
+sont stocker dans une base SQLite. Il est à noter que le moteur de la 
+base de donnée SQLite est multiplate-forme et open-source. Divers 
+logiciel permette d’y accéder comme sqlite (en ligne de commande), 
+SQLite Manager (module de Firefox) et bien d’autres. Le plus efficace 
+est sûrement d’écrire un script permettant de se connecter à la base et 
+de tirer des requêtes.
 </div>
 <a class="toc" name="Références"></a><h1 class="biblio">
 Références
