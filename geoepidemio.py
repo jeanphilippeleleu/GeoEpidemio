@@ -394,9 +394,11 @@ class GeoEpidemio:
         
     def Apropos(self):
         texte="Auteur: Jean-philippe Leleu\n"\
-        "mail: jean-philippe.leleu2@wanadoo.fr\n"\
+        "Mail: jean-philippe.leleu2@wanadoo.fr\n"\
+        "Bugtracker:https://github.com/jeanphilippeleleu/GeoEpidemio/issues\n"\
+        "Site: https://github.com/jeanphilippeleleu/GeoEpidemio\n"\
         "Organisation:\n"\
-        "Version Python:\n"+str(sys.version)
+        "Version Python:"+str(sys.version)
         
         QMessageBox.information(None, 'A propos de',texte )
         
