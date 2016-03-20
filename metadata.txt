@@ -1,10 +1,11 @@
 [general]
 name=Geo-epidemiologie
 description=Compute the number of persons years from the census data, specific incidence rates and expected number of case for (geo)-epidemiological studies.The data are provided only for France.
-version=1.0
+version=1.99.13
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99
 class_name=GeoEpidemio
-website=
+website=https://github.com/jeanphilippeleleu/GeoEpidemio
+bugtracker=https://github.com/jeanphilippeleleu/GeoEpidemio/issues
 author=leleu jean-philippe
 email=jean-philippe.leleu2@wanadoo.fr
