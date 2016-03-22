@@ -24,7 +24,7 @@ def name():
 def description():
     return "calcul du nombre de personne-annees et des taux d'incidences"
 def version():
-    return "Version 0.1"
+    return "Version 1.99.13"
 def icon():
     return "icon.png"
 def qgisMinimumVersion():
