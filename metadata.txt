@@ -5,7 +5,14 @@ version=1.99.13
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99
 class_name=GeoEpidemio
-website=https://github.com/jeanphilippeleleu/GeoEpidemio
-bugtracker=https://github.com/jeanphilippeleleu/GeoEpidemio/issues
+
+repository=https://github.com/jeanphilippeleleu/GeoEpidemio
+tracker=https://github.com/jeanphilippeleleu/GeoEpidemio/issues
 author=leleu jean-philippe
 email=jean-philippe.leleu2@wanadoo.fr
+
+# tags are comma separated with spaces allowed
+tags=base de données
+
+# experimental flag
+experimental=False
